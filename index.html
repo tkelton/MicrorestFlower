@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mouse Follow Emoji</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .icon {
+            position: absolute;
+            font-size: 50px;
+            pointer-events: none; /* Prevent the icon from interfering with mouse events */
+            transform: translate(-50%, -50%); /* Center the icon relative to its position */
+            opacity: 0; /* Start with the icon hidden */
+            transition: opacity 0.3s; /* Smooth transition for showing/hiding the icon */
+        }
+    </style>
+</head>
+<body>
+    <div class="icon" id="icon">🥀</div>
+
+    <script>
+        const icon = document.getElementById('icon');
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let iconX = window.innerWidth / 2, iconY = window.innerHeight / 2;
+        let timeoutId;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+            icon.style.opacity = 1; // Show the icon on mouse move
+
+            // Clear previous timeout and set a new one to hide the icon after 2 seconds of inactivity
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                icon.style.opacity = 0; // Hide the icon
+            }, 2000);
+        });
+
+        function animate() {
+            const easeFactor = 0.05; // Smaller easing factor for smoother motion
+            iconX += (mouseX - iconX) * easeFactor;
+            iconY += (mouseY - iconY) * easeFactor;
+
+            icon.style.left = `${iconX}px`;
+            icon.style.top = `${iconY}px`;
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
+
